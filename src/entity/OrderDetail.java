@@ -1,10 +1,22 @@
 package entity;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import java.security.acl.Owner;
+
+@Entity
+@Table(name = "order")
 public class OrderDetail {
+    @Id
     private String itemCode;
     private String orderId;
     private int qty;
     private double price;
+
+    @ManyToOne
+    private Order order;
 
     public OrderDetail() {
     }

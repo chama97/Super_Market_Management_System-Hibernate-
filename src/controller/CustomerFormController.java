@@ -24,6 +24,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import asset.validation.Validation;
 import util.FactoryConfiguration;
+import util.factory.CustomerDAO;
 import view.tm.CustomerTM;
 
 import java.io.IOException;
@@ -72,7 +73,7 @@ public class CustomerFormController {
 
     private void loadAllCustomers() {
         tblCstDetail.getItems().clear();
-        List<Customer> allCustomers = FactoryConfiguration.getCustomers();
+        List<Customer> allCustomers = CustomerDAO.getCustomers();
         for (Customer customer : allCustomers) {
             tblCstDetail.getItems().add(new CustomerTM(customer.getId(), customer.getName(), customer.getAddress(), customer.getProvince(), customer.getPostalCode()));
         }
@@ -122,7 +123,7 @@ public class CustomerFormController {
                 new Alert(Alert.AlertType.ERROR, id + " already exists").show();
             }*/
             Customer customer = new Customer(id, name, address, province, code);
-            FactoryConfiguration.saveCustomer(customer);
+            CustomerDAO.saveCustomer(customer);
             tblCstDetail.getItems().add(new CustomerTM(id, name, address, province, code));
             new Alert(Alert.AlertType.CONFIRMATION, "Saved Successfully " + id).show();
             initUI();
@@ -157,7 +158,7 @@ public class CustomerFormController {
             if (!existCustomer(id)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
             }*/
-            FactoryConfiguration.DeleteCustomer(id);
+            CustomerDAO.DeleteCustomer(id);
             tblCstDetail.getItems().remove(tblCstDetail.getSelectionModel().getSelectedItem());
             tblCstDetail.getSelectionModel().clearSelection();
             new Alert(Alert.AlertType.CONFIRMATION, "Deleted Successfully " + id).show();

@@ -1,8 +1,5 @@
 package controller;
 
-import dao.DAOFactory;
-import dao.custom.OrderDAO;
-import dao.custom.QueryDAO;
 import entity.Order;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -36,7 +33,7 @@ public class IncomeReportsFormController {
     public TableColumn colOdDate;
     public TableColumn colCstIncome;
     public Label lblTotalIncome;
-    private final OrderDAO orderDAO = (OrderDAO) DAOFactory.getDAOFactory().getDAO(DAOFactory.DAOTypes.ORDER);
+   // private final OrderDAO orderDAO = (OrderDAO) DAOFactory.getDAOFactory().getDAO(DAOFactory.DAOTypes.ORDER);
 
     public void initialize() {
 
@@ -45,10 +42,10 @@ public class IncomeReportsFormController {
         colOdDate.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
         colCstIncome.setCellValueFactory(new PropertyValueFactory<>("cost"));
 
-        loadAllOrders();
+       // loadAllOrders();
     }
 
-    private void loadAllOrders() {
+   /* private void loadAllOrders() {
         tblIncomeReport.getItems().clear();
         try {
             ArrayList<Order> allOrders = orderDAO.getAll();
@@ -63,7 +60,7 @@ public class IncomeReportsFormController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public void closeWindowOnAction(MouseEvent mouseEvent) throws IOException {
         URL resource  = (getClass().getResource("../view/DashBoardForm.fxml"));

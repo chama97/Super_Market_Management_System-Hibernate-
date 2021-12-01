@@ -1,8 +1,6 @@
 package controller;
 
 import com.jfoenix.controls.JFXButton;
-import dao.DAOFactory;
-import dao.custom.OrderDAO;
 import entity.Order;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +29,7 @@ public class ManageOrdersFormController {
     public TableColumn colTime;
     public TableColumn colCost;
 
-    private final OrderDAO orderDAO = (OrderDAO) DAOFactory.getDAOFactory().getDAO(DAOFactory.DAOTypes.ORDER);
+    //private final OrderDAO orderDAO = (OrderDAO) DAOFactory.getDAOFactory().getDAO(DAOFactory.DAOTypes.ORDER);
     public JFXButton btnUpdate;
     public JFXButton btnDelete;
 
@@ -47,10 +45,10 @@ public class ManageOrdersFormController {
             btnDelete.setDisable(newValue == null);
             btnUpdate.setDisable(newValue == null);
         });
-        loadAllOrders();
+        //loadAllOrders();
     }
 
-    private void loadAllOrders() {
+    /*private void loadAllOrders() {
         tblOrders.getItems().clear();
         try {
             ArrayList<Order> allOrders = orderDAO.getAll();
@@ -62,7 +60,7 @@ public class ManageOrdersFormController {
         } catch (ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
-    }
+    }*/
 
     private void initUI() {
         btnDelete.setDisable(true);
@@ -81,7 +79,7 @@ public class ManageOrdersFormController {
     }
 
     public void deleteOrderOnAction(ActionEvent actionEvent) {
-        String id = tblOrders.getSelectionModel().getSelectedItem().getOrderId();
+        /*String id = tblOrders.getSelectionModel().getSelectedItem().getOrderId();
         try {
             if (!existOrder(id)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
@@ -97,11 +95,11 @@ public class ManageOrdersFormController {
             new Alert(Alert.AlertType.ERROR, "Failed to delete the customer " + id).show();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
-    boolean existOrder(String id) throws SQLException, ClassNotFoundException {
+   /* boolean existOrder(String id) throws SQLException, ClassNotFoundException {
         return orderDAO.ifOrderExist(id);
-    }
+    }*/
 
 }

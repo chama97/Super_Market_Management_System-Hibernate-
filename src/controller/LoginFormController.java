@@ -14,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import entity.User;
 import util.FactoryConfiguration;
+import util.factory.UserDAO;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -60,7 +61,7 @@ public class LoginFormController {
     }
 
     public  boolean isUserValid(User user) throws SQLException, ClassNotFoundException {
-        List<User> users = FactoryConfiguration.getUsers();
+        List<User> users = UserDAO.getUsers();
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getUsername().equals(user.getUsername())) {
                 if (users.get(i).getPassword().equals(user.getPassword())) {
@@ -72,7 +73,7 @@ public class LoginFormController {
     }
 
     public  boolean isUserAdmin(User user) throws SQLException, ClassNotFoundException {
-        List<User> users = FactoryConfiguration.getUsers();
+        List<User> users = UserDAO.getUsers();
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getUsername().equals(user.getUsername())) {
                 if (users.get(i).getPassword().equals(user.getPassword())) {

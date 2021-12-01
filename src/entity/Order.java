@@ -2,9 +2,11 @@ package entity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "order")
-@Table(name = "user")
+@Table(name = "order")
 public class Order {
     @Id
     @Column(name = "oid")
@@ -19,15 +21,19 @@ public class Order {
     @Column(name = "cost")
     private double cost;
 
+    @OneToMany(mappedBy = "order")
+    private List<OrderDetail> petList = new ArrayList<>();
+
+
     public Order() {
     }
-
-    public Order(String orderId, String CId, LocalDate orderDate, String orderTime, double cost) {
-        this.orderId = orderId;
-        this.CId = CId;
+    public Order(String orderId, String CId, LocalDate orderDate, String orderTime, double cost, List<OrderDetail> petList) {
+        this.setOrderId(orderId);
+        this.setCId(CId);
         this.setOrderDate(orderDate);
-        this.orderTime = orderTime;
-        this.cost = cost;
+        this.setOrderTime(orderTime);
+        this.setCost(cost);
+        this.setPetList(petList);
     }
 
     public String getOrderId() {
@@ -42,11 +48,21 @@ public class Order {
         return CId;
     }
 
-    public void setCId(String cId) {
-        this.CId = cId;
+    public void setCId(String CId) {
+        this.CId = CId;
     }
 
-    public String getOrderTime() { return orderTime; }
+    public LocalDate getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(LocalDate orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public String getOrderTime() {
+        return orderTime;
+    }
 
     public void setOrderTime(String orderTime) {
         this.orderTime = orderTime;
@@ -60,22 +76,11 @@ public class Order {
         this.cost = cost;
     }
 
-    public LocalDate getOrderDate() {
-        return orderDate;
+    public List<OrderDetail> getPetList() {
+        return petList;
     }
 
-    public void setOrderDate(LocalDate orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    @Override
-    public String toString() {
-        return "order{" +
-                "orderId='" + orderId + '\'' +
-                ", cId='" + CId + '\'' +
-                ", orderDate=" + getOrderDate() +
-                ", orderTime='" + orderTime + '\'' +
-                ", cost=" + cost +
-                '}';
+    public void setPetList(List<OrderDetail> petList) {
+        this.petList = petList;
     }
 }

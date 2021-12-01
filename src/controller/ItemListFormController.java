@@ -22,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import asset.validation.Validation;
 import util.FactoryConfiguration;
+import util.factory.ItemDAO;
 import view.tm.ItemTM;
 
 import java.io.IOException;
@@ -67,7 +68,7 @@ public class ItemListFormController {
 
     private void loadAllCustomers() {
         tblItemList.getItems().clear();
-            List<Item> allItems = FactoryConfiguration.getItems();
+            List<Item> allItems = ItemDAO.getItems();
             for (Item item : allItems) {
                 tblItemList.getItems().add(new ItemTM(item.getCode(), item.getDescription(), item.getQtyOnHand(), item.getUnitPrice()));
             }
@@ -106,7 +107,7 @@ public class ItemListFormController {
                 new Alert(Alert.AlertType.ERROR, id + " already exists").show();
             }*/
             Item dto = new Item(id, name, qty, price );
-            FactoryConfiguration.saveItems(dto);
+            ItemDAO.saveItems(dto);
             tblItemList.getItems().add(new ItemTM(id, name, qty, price));
             new Alert(Alert.AlertType.CONFIRMATION, "Saved Successfully " + id).show();
             controlUI();
@@ -124,7 +125,7 @@ public class ItemListFormController {
             if (!exitItem(id)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
             }*/
-            FactoryConfiguration.DeleteItems(id);
+        ItemDAO.DeleteItems(id);
 
             tblItemList.getItems().remove(tblItemList.getSelectionModel().getSelectedItem());
             tblItemList.getSelectionModel().clearSelection();

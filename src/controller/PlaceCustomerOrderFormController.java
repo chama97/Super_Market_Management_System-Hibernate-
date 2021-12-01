@@ -1,15 +1,12 @@
 package controller;
 
-import bo.BoFactory;
-import bo.custom.PurchaseOrderBO;
 import com.jfoenix.controls.JFXButton;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import dto.CustomerDTO;
-import dto.ItemDTO;
-import dto.OrderDTO;
-import dto.OrderDetailDTO;
 import entity.Customer;
+import entity.Item;
+import entity.Order;
+import entity.OrderDetail;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -24,12 +21,16 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import util.FactoryConfiguration;
+import util.factory.CustomerDAO;
+import util.factory.ItemDAO;
 import view.tm.CartTM;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -66,7 +67,7 @@ public class PlaceCustomerOrderFormController {
     public TableColumn colQty;
     public TableColumn colDelete;
     private String orderId;
-    private final PurchaseOrderBO purchaseOrderBO = (PurchaseOrderBO) BoFactory.getBOFactory().getBO(BoFactory.BoTypes.PURCHASE_ORDER);
+   // private final PurchaseOrderBO purchaseOrderBO = (PurchaseOrderBO) BoFactory.getBOFactory().getBO(BoFactory.BoTypes.PURCHASE_ORDER);
 
     public void initialize() {
 
@@ -103,23 +104,15 @@ public class PlaceCustomerOrderFormController {
         cmbCustomerIds.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             enableOrDisablePlaceOrderButton();
             if (newValue != null) {
-                try {
-                    try {
-                        if (!existCustomer(newValue + "")) {
-                            new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + newValue + "").show();
-                        }
-                        Customer customerDTO = purchaseOrderBO.searchCustomer(newValue + "");
-                        txtName.setText(customerDTO.getName());
-                        txtAddress.setText(customerDTO.getAddress());
-                        txtProvince.setText(customerDTO.getProvince());
-                        txtPostalCode.setText(customerDTO.getPostalCode());
+                /*if (!existCustomer(newValue + "")) {
+                    new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + newValue + "").show();
+                }*/
+                Customer customerDTO = CustomerDAO.searchCustomer(newValue + "");
+                txtName.setText(customerDTO.getName());
+                txtAddress.setText(customerDTO.getAddress());
+                txtProvince.setText(customerDTO.getProvince());
+                txtPostalCode.setText(customerDTO.getPostalCode());
 
-                    } catch (SQLException e) {
-                        new Alert(Alert.AlertType.ERROR, "Failed to find the customer " + newValue + "" + e).show();
-                    }
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
             } else {
                 txtName.clear();
                 txtAddress.clear();
@@ -132,20 +125,20 @@ public class PlaceCustomerOrderFormController {
             txtQty.setEditable(newItemCode != null);
             btnAddCart.setDisable(newItemCode == null);
             if (newItemCode != null) {
-                try {
+                /*try {
                     if (!existItem(newItemCode + "")) {
-                    }
-                    ItemDTO item = purchaseOrderBO.searchItem(newItemCode + "");
+                    }*/
+                    Item item = ItemDAO.searchItem(newItemCode + "");
                     txtDescription.setText(item.getDescription());
                     txtUnitPrice.setText(String.valueOf(item.getUnitPrice()));
                     Optional<CartTM> optOrderDetail = tblCart.getItems().stream().filter(detail -> detail.getCode().equals(newItemCode)).findFirst();
                     txtQtyOnHand.setText((optOrderDetail.isPresent() ? item.getQtyOnHand() - optOrderDetail.get().getQty() : item.getQtyOnHand()) + "");
 
-                } catch (SQLException throwables) {
+                /*} catch (SQLException throwables) {
                     throwables.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
-                }
+                }*/
             } else {
                 txtDescription.clear();
                 txtQty.clear();
@@ -155,22 +148,24 @@ public class PlaceCustomerOrderFormController {
         });
     }
 
-    private boolean existItem(String code) throws SQLException, ClassNotFoundException {
+   /* private boolean existItem(String code) throws SQLException, ClassNotFoundException {
         return purchaseOrderBO.ifItemExist(code);
     }
 
     boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
         return purchaseOrderBO.ifCustomerExist(id);
-    }
+    }*/
 
     public String generateNewOrderId() {
-        try {
-            return purchaseOrderBO.generateNewOrderId();
+
+      //  try {
+            System.out.println("O-002");
+       /*     return OrderDA.generateNewOrderId();
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to generate a new order id").show();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
+        }*/
         return null;
     }
 
@@ -179,29 +174,17 @@ public class PlaceCustomerOrderFormController {
     }
 
     private void loadAllCustomerIds() {
-        try {
-            ArrayList<CustomerDTO> all = purchaseOrderBO.getAllCustomers();
-            for (CustomerDTO customerDTO : all) {
+            List<Customer> all = CustomerDAO.getCustomers();
+            for (Customer customerDTO : all) {
                 cmbCustomerIds.getItems().add(customerDTO.getId());
             }
-        } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, "Failed to load customer ids").show();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     private void loadAllItemCodes() {
-        try {
-            ArrayList<ItemDTO> all = purchaseOrderBO.getAllItems();
-            for (ItemDTO dto : all) {
+            List<Item> all = ItemDAO.getItems();
+            for (Item dto : all) {
                 cmbItemIds.getItems().add(dto.getCode());
             }
-        } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     private void loadDateAndTime() {
@@ -285,7 +268,7 @@ public class PlaceCustomerOrderFormController {
 
     public void placeOrderOnAction(ActionEvent actionEvent) {
         boolean b = saveOrder(orderId, cmbCustomerIds.getValue(), LocalDate.parse(lblDate.getText()), lblTime.getText(), Double.parseDouble(lblTotalIncome.getText()),
-                tblCart.getItems().stream().map(tm -> new OrderDetailDTO(tm.getCode(), orderId , tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
+                tblCart.getItems().stream().map(tm -> new OrderDetail(tm.getCode(), orderId , tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
         if (b) {
             new Alert(Alert.AlertType.INFORMATION, "Order has been placed successfully").show();
         } else {
@@ -301,28 +284,22 @@ public class PlaceCustomerOrderFormController {
         calculateTotal();
     }
 
-    public boolean saveOrder(String orderId, String customerId, LocalDate orderDate,  String time, double cost, List<OrderDetailDTO> orderDetails) {
-        try {
-            OrderDTO orderDTO = new OrderDTO(orderId, customerId, orderDate, time, cost, orderDetails);
+    public boolean saveOrder(String orderId, String customerId, LocalDate orderDate,  String time, double cost, List<OrderDetail> orderDetails) {
+       /* try {
+            Order orderDTO = new Order(orderId, customerId, orderDate, time, cost, orderDetails);
             return purchaseOrderBO.purchaseOrder(orderDTO);
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
+        }*/
         return false;
     }
 
-    public ItemDTO findItem(String code) {
-        try {
-            return purchaseOrderBO.searchItem(code);
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to find the Item " + code, e);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Item findItem(String code) {
+        return ItemDAO.searchItem(code);
+
     }
 
     public void printOnAction(MouseEvent mouseEvent) {

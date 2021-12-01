@@ -1,10 +1,6 @@
 package controller;
 
-import dao.CrudDAO;
-import dao.DAOFactory;
-import dao.custom.OrderDAO;
-import dao.custom.OrderDetailsDAO;
-import dao.custom.impl.OrderDetailsDAOImpl;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,7 +26,7 @@ public class OrderDetailFormController {
     public TableColumn colOrderId;
     public TableColumn colQty;
     public TableColumn colPrice;
-    private final OrderDetailsDAO orderDAO = (OrderDetailsDAO) DAOFactory.getDAOFactory().getDAO(DAOFactory.DAOTypes.ORDERDETAILS);
+   // private final OrderDetailsDAO orderDAO = (OrderDetailsDAO) DAOFactory.getDAOFactory().getDAO(DAOFactory.DAOTypes.ORDERDETAILS);
 
     public void initialize() {
         colItemCod.setCellValueFactory(new PropertyValueFactory<>("itemCode"));
@@ -38,10 +34,10 @@ public class OrderDetailFormController {
         colQty.setCellValueFactory(new PropertyValueFactory<>("qty"));
         colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-        loadAllOrderDetails();
+       // loadAllOrderDetails();
     }
 
-    private void loadAllOrderDetails() {
+   /* private void loadAllOrderDetails() {
         tblOrderDetail.getItems().clear();
         try {
             ArrayList<OrderDetail> allOrders = orderDAO.getAll();
@@ -55,7 +51,7 @@ public class OrderDetailFormController {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
-
+*/
 
     public void closeWindowOnAction(MouseEvent mouseEvent) throws IOException {
         URL resource  = (getClass().getResource("../view/DashBoardForm.fxml"));
