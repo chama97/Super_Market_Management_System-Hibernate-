@@ -21,19 +21,27 @@ public class Order {
     @Column(name = "cost")
     private double cost;
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderDetail> petList = new ArrayList<>();
-
-
     public Order() {
     }
-    public Order(String orderId, String CId, LocalDate orderDate, String orderTime, double cost, List<OrderDetail> petList) {
+
+    public Order(String orderId, String CId, LocalDate orderDate, String orderTime, double cost) {
+        this.orderId = orderId;
+        this.CId = CId;
+        this.orderDate = orderDate;
+        this.orderTime = orderTime;
+        this.cost = cost;
+    }
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderDetail> orderList = new ArrayList<>();
+
+    public Order(String orderId, String CId, LocalDate orderDate, String orderTime, double cost, List<OrderDetail> orderList) {
         this.setOrderId(orderId);
         this.setCId(CId);
         this.setOrderDate(orderDate);
         this.setOrderTime(orderTime);
         this.setCost(cost);
-        this.setPetList(petList);
+        this.setOrderList(orderList);
     }
 
     public String getOrderId() {
@@ -76,11 +84,11 @@ public class Order {
         this.cost = cost;
     }
 
-    public List<OrderDetail> getPetList() {
-        return petList;
+    public List<OrderDetail> getOrderList() {
+        return orderList;
     }
 
-    public void setPetList(List<OrderDetail> petList) {
-        this.petList = petList;
+    public void setOrderList(List<OrderDetail> orderList) {
+        this.orderList = orderList;
     }
 }

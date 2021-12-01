@@ -1,5 +1,6 @@
 package util.factory;
 
+import entity.Customer;
 import entity.Item;
 import org.hibernate.Session;
 import util.FactoryConfiguration;
@@ -37,12 +38,31 @@ public class ItemDAO {
     }
 
     public static boolean DeleteItems(String id) {
+        Item item = null;
         Session session = FactoryConfiguration.getInstance().getSession();
         try {
             session = FactoryConfiguration.getInstance().getSession();
             session.beginTransaction();
 
-            int executeUpdate = session.createQuery("DELETE FROM Item WHERE code = '" + id + "'").executeUpdate();
+            item = session.get(Item.class, id);
+            session.delete(item);
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return true;
+    }
+
+    public static boolean updateItems(Item items) {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        try {
+            session = FactoryConfiguration.getInstance().getSession();
+            session.beginTransaction();
+
+            session.saveOrUpdate(items);
             session.getTransaction().commit();
 
         } catch (Exception e) {

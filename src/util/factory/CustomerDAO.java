@@ -37,12 +37,14 @@ public class CustomerDAO {
     }
 
     public static boolean DeleteCustomer(String cId) {
+        Customer customer = null;
         Session session = FactoryConfiguration.getInstance().getSession();
         try {
             session = FactoryConfiguration.getInstance().getSession();
             session.beginTransaction();
 
-            int executeUpdate = session.createQuery("DELETE FROM Customer WHERE id = '" + cId + "'").executeUpdate();
+            customer = session.get(Customer.class, cId);
+            session.delete(customer);
             session.getTransaction().commit();
 
         } catch (Exception e) {
@@ -58,6 +60,7 @@ public class CustomerDAO {
         Session session = FactoryConfiguration.getInstance().getSession();
         try {
             session.beginTransaction();
+           // customer = session.get(Customer.class, id);
             customer = (Customer) session.createQuery("SELECT * FROM Customer WHERE id = '" + id + "'").list();
             session.getTransaction().commit();
 

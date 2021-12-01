@@ -24,6 +24,7 @@ import javafx.util.Duration;
 import util.FactoryConfiguration;
 import util.factory.CustomerDAO;
 import util.factory.ItemDAO;
+import util.factory.OrderDAO;
 import view.tm.CartTM;
 
 import java.io.IOException;
@@ -285,15 +286,15 @@ public class PlaceCustomerOrderFormController {
     }
 
     public boolean saveOrder(String orderId, String customerId, LocalDate orderDate,  String time, double cost, List<OrderDetail> orderDetails) {
-       /* try {
+        try {
             Order orderDTO = new Order(orderId, customerId, orderDate, time, cost, orderDetails);
-            return purchaseOrderBO.purchaseOrder(orderDTO);
+            return OrderDAO.purchaseOrder(orderDTO);
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }*/
+        }
         return false;
     }
 

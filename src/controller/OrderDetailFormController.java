@@ -12,12 +12,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import entity.OrderDetail;
+import util.factory.OrderDetailDAO;
 import view.tm.OrderDetailTM;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class OrderDetailFormController {
     public AnchorPane orderDetail;
@@ -34,24 +36,16 @@ public class OrderDetailFormController {
         colQty.setCellValueFactory(new PropertyValueFactory<>("qty"));
         colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-       // loadAllOrderDetails();
+        loadAllOrderDetails();
     }
 
-   /* private void loadAllOrderDetails() {
+    private void loadAllOrderDetails() {
         tblOrderDetail.getItems().clear();
-        try {
-            ArrayList<OrderDetail> allOrders = orderDAO.getAll();
+            List<OrderDetail> allOrders = OrderDetailDAO.getOrderDetail();
             for (OrderDetail order : allOrders) {
                 tblOrderDetail.getItems().add(new OrderDetailTM(order.getItemCode(),order.getOrderId(),  order.getQty(), order.getPrice()));
             }
-
-        } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        } catch (ClassNotFoundException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        }
     }
-*/
 
     public void closeWindowOnAction(MouseEvent mouseEvent) throws IOException {
         URL resource  = (getClass().getResource("../view/DashBoardForm.fxml"));

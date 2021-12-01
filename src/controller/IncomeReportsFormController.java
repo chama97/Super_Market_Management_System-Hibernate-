@@ -16,6 +16,7 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import util.factory.OrderDAO;
 import view.tm.CartTM;
 import view.tm.IncomeReportTM;
 import view.tm.OrderTM;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class IncomeReportsFormController {
     public AnchorPane incomeReport;
@@ -42,25 +44,17 @@ public class IncomeReportsFormController {
         colOdDate.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
         colCstIncome.setCellValueFactory(new PropertyValueFactory<>("cost"));
 
-       // loadAllOrders();
+        loadAllOrders();
     }
 
-   /* private void loadAllOrders() {
+    private void loadAllOrders() {
         tblIncomeReport.getItems().clear();
-        try {
-            ArrayList<Order> allOrders = orderDAO.getAll();
+            List<Order> allOrders = OrderDAO.getOrder();
             for (Order order : allOrders) {
                 tblIncomeReport.getItems().add(new IncomeReportTM(order.getOrderId(), order.getCId(), order.getOrderDate(), order.getCost()));
             }
-            lblTotalIncome.setText(String.valueOf(orderDAO.getOrderTotalCost()));
-        } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        } catch (ClassNotFoundException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
+            lblTotalIncome.setText(String.valueOf(OrderDAO.getTotalIncome()));
+    }
 
     public void closeWindowOnAction(MouseEvent mouseEvent) throws IOException {
         URL resource  = (getClass().getResource("../view/DashBoardForm.fxml"));

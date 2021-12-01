@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import util.factory.OrderDAO;
 
 import java.io.IOException;
 import java.net.URL;
@@ -45,17 +46,17 @@ public class DashboardFormController {
             lblRole.setText("Receptionist");
         }
         loadDateAndTime();
-        /*try {
-            lblOrder.setText("00"+orderDAO.getOrderCount());
-            lblSale.setText("Rs: "+orderDAO.getOrderTotalCost());
+        try {
+            lblOrder.setText("00"+OrderDAO.getOrderCount());
+            lblSale.setText("Rs: "+ OrderDAO.getTotalIncome());
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException throwables) {
-            throwables.printStackTrace();*//*
+            throwables.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
 
     }
 

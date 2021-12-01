@@ -13,12 +13,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import util.factory.OrderDAO;
 import view.tm.OrderTM;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ManageOrdersFormController {
     public AnchorPane manageOrder;
@@ -29,7 +31,6 @@ public class ManageOrdersFormController {
     public TableColumn colTime;
     public TableColumn colCost;
 
-    //private final OrderDAO orderDAO = (OrderDAO) DAOFactory.getDAOFactory().getDAO(DAOFactory.DAOTypes.ORDER);
     public JFXButton btnUpdate;
     public JFXButton btnDelete;
 
@@ -45,22 +46,16 @@ public class ManageOrdersFormController {
             btnDelete.setDisable(newValue == null);
             btnUpdate.setDisable(newValue == null);
         });
-        //loadAllOrders();
+        loadAllOrders();
     }
 
-    /*private void loadAllOrders() {
+    private void loadAllOrders() {
         tblOrders.getItems().clear();
-        try {
-            ArrayList<Order> allOrders = orderDAO.getAll();
+            List<Order> allOrders = OrderDAO.getOrder();
             for (Order order : allOrders) {
                 tblOrders.getItems().add(new OrderTM(order.getOrderId(), order.getCId(), order.getOrderDate(), order.getOrderTime(), order.getCost()));
             }
-        } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        } catch (ClassNotFoundException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        }
-    }*/
+    }
 
     private void initUI() {
         btnDelete.setDisable(true);
@@ -79,23 +74,12 @@ public class ManageOrdersFormController {
     }
 
     public void deleteOrderOnAction(ActionEvent actionEvent) {
-        /*String id = tblOrders.getSelectionModel().getSelectedItem().getOrderId();
-        try {
-            if (!existOrder(id)) {
-                new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
-            }
-            orderDAO.delete(id);
-
+        String id = tblOrders.getSelectionModel().getSelectedItem().getOrderId();
+            OrderDAO.DeleteOrder(id);
             tblOrders.getItems().remove(tblOrders.getSelectionModel().getSelectedItem());
             tblOrders.getSelectionModel().clearSelection();
             new Alert(Alert.AlertType.CONFIRMATION, "Deleted Successfully " + id).show();
             initUI();
-
-        } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, "Failed to delete the customer " + id).show();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }*/
     }
 
    /* boolean existOrder(String id) throws SQLException, ClassNotFoundException {
